@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static', filename='img/logo.svg')}} " type="image/x-icon">
+    <title>Document</title>
+</head>
+
+<body class="flex flex-col  justify-center items-center">
+    <header class="w-screen">
+        <nav class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg">
+
+            <div class="w-36 flex justify-between text-center text-white font-bold items-center">
+                <a href="" class="" name="logo"><img src="{{url_for('static', filename='img/logo.svg')}}" alt=""></a>
+                <label for="logo"
+                    class="text-lg p-1 hover:cursor-pointer hover:underline hover:text-green-400">Classroom</label>
+            </div>
+
+            <div class="flex text-white font-bold mx-4 p-4 text-center items-center">
+                <form action="/logout" method="post">
+                    <input type="submit" value="Cerrar sesion"
+                        class="mx-4 p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">
+                </form>
+            </div>
+        </nav>
+    </header>
+    <section class="w-auto grid grid-cols-1 items-center mt-10">
+
+        <form action="/upload" method="post" enctype="multipart/form-data"
+            class="flex flex-col justify-center items-center mx-auto my-auto p-24 ">
+            <div class="flex flex-col p-9 items-center shadow-2xl shadow-black rounded-xl bg-white ">
+                <h1 class="text-center text-3xl font-bold mb-4">Agregar Actividad </h1>
+                <input type="text" placeholder="Nombre de la actividad" name="nombre_actividad"
+                    class="p-2 outline-none border-gray-600 border-2 rounded-xl w-96 mb-4 focus:border-gray-300 focus:transition focus:duration-500 focus:shadow-lg focus:shadow-slate-800 font-bold">
+                <textarea name="descripcion" id="" cols="30" rows="5"
+                    placeholder="Descripcion (Que deben hacer los estudiantes/ Instrucciones)"
+                    class="p-2 outline-none border-gray-600 border-2 rounded-xl w-96 mb-4 focus:border-gray-300 focus:transition focus:duration-500 focus:shadow-lg focus:shadow-slate-800 font-bold"></textarea>
+                <label for="" class="text-2xl font-bold">Archivos Necesarios</label>
+                <input type="file" multiple id="archivos[]" name="archivos[]"
+                    class="my-4 p-2 outline-none border-gray-600 border-2 rounded-xl w-96focus:border-gray-300 focus:transition focus:duration-500 focus:shadow-lg focus:shadow-slate-800 font-bold ">
+                    <select name="grado" id="">
+                        <option name="grado" value="7">7</option>
+                        <option name="grado" value="8">8</option>
+                        <option name="grado" value="9">9</option>
+                    </select>
+                    <input type="submit" value="Subir Actividad"
+                    class="bg-slate-500 p-2 w-32 rounded-xl hover:bg-slate-300 hover:transition hover:duration-500 hover:shadow-lg hover:shadow-slate-800 font-semibold">
+            </div>
+        </form>
+    </section>
+</body>

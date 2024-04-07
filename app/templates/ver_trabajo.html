@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link rel="shortcut icon" href="{{url_for('static', filename='img/logo.svg')}} " type="image/x-icon">
+    <title>Classroom</title>
+    <style>
+        #aside {
+            transition: margin-left 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <header class="fixed w-screen top-0 ">
+            <nav
+                class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg">
+                <div class="flex justify-between text-center text-white font-bold items-center">
+                    <button onclick="toggleAside()" class=" text-white p-2 rounded"><img
+                            src="{{url_for('static', filename='img/menu-2.svg')}}" width="35" alt=""></button>
+                    <a href="" class="" name="logo"><img src="{{url_for('static', filename='img/logo.svg')}}" width="40"
+                            alt=""></a>
+                    <label for="logo"
+                        class="text-lg p-1 hover:cursor-pointer hover:underline hover:text-green-400">Classroom</label>
+                </div>
+
+                <div class="flex text-white font-bold mx-4 p-4 text-center items-center">
+                    <h1>{{nombre}} <strong>{{grado}}°{{grupo}}</strong></h1>
+                    <form action="/logout" method="post">
+                        <input type="submit" value="Cerrar sesion"
+                            class="mx-4 p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">
+                    </form>
+                </div>
+            </nav>
+        </header>
+        <div class="min-h-screen flex flex-col sm:flex-row">
+            <aside id="aside" class="bg-gray-800 text-white mt-16 p-4 w-64">
+                <h2 class="text-xl font-semibold">Tareas Asignadas</h2>
+                {%for lit in lista%}
+                <ul>
+                    <li><a href="/ver_actividad/{{trabajo.0}}">{{lit.0}}</a></li>
+                </ul>
+                {%endfor%}
+            </aside>
+            <main class="flex-grow p-4 mt-10">
+                <div class="container mx-auto py-8 ">
+                    <div class="sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {%for trabajo in trabajos%}
+                        <div class="bg-white rounded-lg shadow-xl  p-4 mb-4 grid grid-rows-3">
+                            <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
+                            <p>{{trabajo.2}}</p>
+                            <h2 class="text-xl font-semibold text-gray-800">Archivos Necesarios</h2>
+                            
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script>
+            function toggleAside() {
+                const aside = document.getElementById('aside');
+                const currentMargin = parseInt(window.getComputedStyle(aside).marginLeft);
+                if (currentMargin === 0) {
+                    aside.style.marginLeft = '-264px';
+                } else {
+                    aside.style.marginLeft = '0';
+                }
+            }
+        </script>
+    </body>
+
+</html>
+</body>
+
+</html>
