@@ -118,13 +118,21 @@ def delete(id_trabajo):
     cursor= mysql.connection.cursor()
     return render_template('delete.html')
 
-@app.route('/update/<string:id_trabajo>')
-def update(id_trabajo):
 
+@app.route('/update')
+def int_update():
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT * FROM trabajos')
+    trabajos= cursor.fetchall()
+    return render_template('update.html' ,trabajos= trabajos)
+
+@app.route('/update/<string:id_trabajo>', methods= ['POST'])
+def update(id_trabajo):
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos WHERE id_trabajo = %s', (id_trabajo))
-
-    return render_template('update.html')
+    datos= cursor.fetchone()
+    
+    return render_template('form_update.html',datos= datos)
 
 
 
