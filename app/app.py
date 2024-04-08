@@ -8,7 +8,7 @@ import datetime
 
 app= Flask(__name__)
 
-UPLOAD_FOLDER = os.path.join('app/static', 'upload')
+UPLOAD_FOLDER = os.path.join('app/static/', 'upload')
 ALLOWED_EXTENSIONS= set(['pdf','pptx','docx','jpg','png','peg', 'mp4', 'mp3', 'wav' ])
 
 if not os.path.exists(UPLOAD_FOLDER):
@@ -77,12 +77,7 @@ def interfaz_maestro():
     trabajos= cursor.fetchall()
     return render_template('interfaz_maestro.html',trabajos=trabajos)
 
-
-
-@app.route('/add')
-def add():
-    return render_template('add.html')
-
+#CRUD
 
 def allowed_file(file):
 
@@ -91,6 +86,10 @@ def allowed_file(file):
     if file[1] in ALLOWED_EXTENSIONS:
         return True
     return False
+
+@app.route('/add')
+def add():
+    return render_template('add.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -112,6 +111,23 @@ def upload():
         return redirect(url_for('interfaz_maestro'))
     else:
         return 'archivo no Permitido'
+
+
+@app.route('/delete/<string:id_trabajo>')
+def delete(id_trabajo):
+    cursor= mysql.connection.cursor()
+    return render_template('delete.html')
+
+@app.route('/update/<string:id_trabajo>')
+def update(id_trabajo):
+
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT * FROM trabajos WHERE id_trabajo = %s', (id_trabajo))
+
+    return render_template('update.html')
+
+
+
 
 @app.route('/ver_actividad/<string:id>', methods= ['GET', 'POST'])
 def  ver_actividad(id):
