@@ -122,13 +122,29 @@ def delete(id_trabajo):
 
 
 
-@app.route('/update/<string:id_trabajo>', methods= ['POST'])
+@app.route('/update/<string:id_trabajo>')
 def update(id_trabajo):
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos WHERE id_trabajo= %s', (id_trabajo))
     datos= cursor.fetchone()
+
+    if request.method == 'POST':
+
+        nombre_actividad= request.form['nombre_actividad']
+        descripcion= request.form['descripcion']
+        file= request.files.getlist('archivos[]')
+
+        for archivo in file:
+            filename= secure_filename(archivo.filename)
+
+        if archivo and allowed_file(filename):
+            archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+            cursor= mysql.connection.cursor()
+            cursor.execute('UPDATE trabajos  SET nombre_actividad = %s, descripcion = %s, filename = %s WHERE id_trabajo = %s ', (nombre_actividad, descripcion, filename, id_trabajo,))
+            mysql.connection.commit()
+            return redirect(url_for('interfaz_maestro'))
     
-    return render_template('form_update.html',datos= datos)
+    return render_template('update.html',datos= datos)
 
 
 
