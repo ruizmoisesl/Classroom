@@ -67,8 +67,8 @@
                                 <p>{{trabajo.4}}</p>
                             </div>
                             <div class="mt-4  flex flex-row">
-                                <a href="" class="flex flex-row  w-24  p-1.5 rounded-lg  font-semibold bg-blue-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300"><img src="{{url_for('static', filename='img/edit.svg')}}" alt="">EDITAR</a>
-                                <a href="" class="flex flex-row w-26 mx-4 p-1.5 rounded-lg  bg-red-600 font-semibold hover:bg-red-500 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300"><img src="{{url_for('static', filename= 'img/delete.svg')}}" alt=""> ELIMINAR</a>
+                                <a href="/update/{{trabajo.0}}" class="flex flex-row  w-24  p-1.5 rounded-lg  font-semibold bg-blue-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300"><img src="{{url_for('static', filename='img/edit.svg')}}" alt="">EDITAR</a>
+                                <a href="/delete/{{trabajo.0}}" class="flex flex-row w-26 mx-4 p-1.5 rounded-lg  bg-red-600 font-semibold hover:bg-red-500 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300"><img src="{{url_for('static', filename= 'img/delete.svg')}}" alt=""> ELIMINAR</a>
                             </div>
 
                         </div>

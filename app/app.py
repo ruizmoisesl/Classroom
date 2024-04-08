@@ -116,7 +116,9 @@ def upload():
 @app.route('/delete/<string:id_trabajo>')
 def delete(id_trabajo):
     cursor= mysql.connection.cursor()
-    return render_template('delete.html')
+    cursor.execute('DELETE FROM trabajos WHERE id_trabajo =%s',(id_trabajo))
+    mysql.connection.commit()
+    return redirect(url_for('interfaz_maestro'))
 
 
 @app.route('/update')
@@ -129,7 +131,7 @@ def int_update():
 @app.route('/update/<string:id_trabajo>', methods= ['POST'])
 def update(id_trabajo):
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM trabajos WHERE id_trabajo = %s', (id_trabajo))
+    cursor.execute('SELECT * FROM trabajos WHERE id_trabajo= %s', (id_trabajo))
     datos= cursor.fetchone()
     
     return render_template('form_update.html',datos= datos)
