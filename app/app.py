@@ -75,7 +75,7 @@ def interfaz_maestro():
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos')
     trabajos= cursor.fetchall()
-    return render_template('interfaz_maestro.html',trabajos=trabajos)
+    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos))
 
 #CRUD
 
@@ -122,7 +122,7 @@ def delete(id_trabajo):
 
 
 
-@app.route('/update/<string:id_trabajo>')
+@app.route('/update/<string:id_trabajo>', methods= ['GET','POST'])
 def update(id_trabajo):
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos WHERE id_trabajo= %s', (id_trabajo))
@@ -142,9 +142,11 @@ def update(id_trabajo):
             cursor= mysql.connection.cursor()
             cursor.execute('UPDATE trabajos  SET nombre_actividad = %s, descripcion = %s, filename = %s WHERE id_trabajo = %s ', (nombre_actividad, descripcion, filename, id_trabajo,))
             mysql.connection.commit()
+
             return redirect(url_for('interfaz_maestro'))
     
-    return render_template('update.html',datos= datos)
+    
+    return render_template('update.html',datos=datos)
 
 
 

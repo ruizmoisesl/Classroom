@@ -79,8 +79,8 @@
         </div>
         <script>
             function toggleAside() {
-                var aside = document.getElementById('aside');
-                var currentMargin = parseInt(window.getComputedStyle(aside).marginLeft);
+                const aside = document.getElementById('aside');
+                const currentMargin = parseInt(window.getComputedStyle(aside).marginLeft);
                 if (currentMargin === 0) {
                     aside.style.marginLeft = '-264px'; // Width of the aside
                 } else {
