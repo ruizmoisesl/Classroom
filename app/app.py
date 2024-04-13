@@ -23,9 +23,22 @@ app.config['UPLOAD_FOLDER']= UPLOAD_FOLDER
 
 mysql= MySQL(app)
 
-septimo= [1,2,3,4,5]
-octavo= [1,2,3,4]
-noveno=[1,2,3]
+def septimo():
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT numero_grupo FROM grupos WHERE id_grado = %s', ('1'))
+    septimo= cursor.fetchone()
+    return septimo
+
+def octavo():
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT numero_grupo FROM grupos WHERE id_grado = %s', ('2'))
+    octavo= cursor.fetchone()
+    return octavo
+def noveno():
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT numero_grupo FROM grupos WHERE id_grado = %s', ('3'))
+    noveno= cursor.fetchone()
+    return noveno
 
 @app.route('/')
 def principal():
@@ -33,7 +46,7 @@ def principal():
 
 @app.route('/register')
 def register():
-    return render_template('estudiantes/register.html')
+    return render_template('register.html')
 
 @app.route('/registro', methods= ['POST'])
 def registro():
@@ -41,16 +54,20 @@ def registro():
         
 @app.route('/login')
 def login():
-    return render_template('estudiantes/login.html')
+    return render_template('interfaz_login.html')
 
 @app.route('/logIn', methods= ['POST'])
 def logIn():
     return log.log()
 
+@app.route('/login_estudiante')
+def login_estudiante():
+    return render_template('login.html')
+
 @app.route('/grupo')
 def grupo():
     grado= session.get('grado')
-    return render_template('estudiantes/grupo.html', grado= grado,septimo= septimo,octavo=octavo,noveno=noveno)
+    return render_template('grupo.html', grado= grado,septimo= septimo(),octavo=octavo(),noveno=noveno())
 
 @app.route('/group', methods= ['POST'])
 def group():
@@ -64,7 +81,7 @@ def interfaz():
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos WHERE grado_trabajo = %s',(grado,))
     trabajos = cursor.fetchall()
-    return render_template('estudiantes/interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=trabajos)
+    return render_template('interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=trabajos)
 
 @app.route('/logout', methods= ['POST'])
 def logout():
@@ -75,7 +92,7 @@ def interfaz_maestro():
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM trabajos')
     trabajos= cursor.fetchall()
-    return render_template('maestros/interfaz_maestro.html',trabajos=reversed(trabajos))
+    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos))
 
 @app.route('/login_maestro')
 def interfaz_loginMaestro():
@@ -85,7 +102,11 @@ def interfaz_loginMaestro():
         cursor= mysql.connection.cursor()
 
 
-    return render_template('maestros/login_maestro.html')
+    return render_template('login_maestro.html')
+
+@app.route('/registro_maestro')
+def registro_maestro():
+    return render_template('register_maestro.html')
 
 #CRUD
 
@@ -176,7 +197,7 @@ def  ver_actividad(id):
     grupo= session.get('grupo')
 
          
-    return render_template('estudiantes/ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo)
+    return render_template('ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo)
 
 
 

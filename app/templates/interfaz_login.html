@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg">
+
+            <div class="w-36 flex justify-between text-center text-white font-bold items-center">
+                <a href="" class="" name="logo"><img src="{{url_for('static', filename='img/logo.svg')}}" alt=""></a>
+                <label for="logo" class="text-lg p-1 hover:cursor-pointer hover:underline hover:text-green-400">Classroom</label>
+            </div>
+
+            <div class="flex text-white font-bold mx-4 p-4 text-center items-center">
+                <a href="/login" class="mx-4 p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">Iniciar Sesion</a>
+                <a href="/register" class="p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">Registrarse</a>
+            </div>
+        </nav>
+    </header>
+    <div class="flex flex-col items-center justify-between my-24 mx-auto">
+        <h1 class="size-20  font-bold">¿Como quieres inciar sesion?</h1>
+        <div class="flex flex-row p-20">
+            <div class="flex flex-col items-center mr-20 justify-between">
+                <img src="{{url_for('static', filename='img/student.svg')}}" alt="" width="150">
+                <a href="/login_estudiante" class="p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 " >Estudiante</a>
+            </div>
+            <div class="flex flex-col items-center ">
+                <img src="{{url_for('static', filename='img/teacher.svg')}}" alt="" width="150">
+                <a href="/login_maestro" class="p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">Maestro</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
