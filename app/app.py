@@ -67,6 +67,10 @@ def register():
 def register_estudiante():
     return render_template('register_estudiante.html', grupos= grados())
 
+@app.route('/register_maestro')
+def register_maestro():
+    return render_template('register_maestro.html', grupos= grados())
+
 @app.route('/registro', methods= ['POST'])
 def registro():
      return reg.register()
@@ -230,6 +234,9 @@ def  ver_actividad(id):
          
     return render_template('ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo)
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
