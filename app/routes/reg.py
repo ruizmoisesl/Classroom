@@ -18,10 +18,10 @@ def register():
             cursor= mysql.connection.cursor()
             cursor.execute('INSERT INTO estudiantes (nombre_completo,email,tipo_documento,numero_documento,grado,contraseña) VALUES (%s,%s,%s,%s,%s,%s)', (nombre,email,tipo_documento,numero_documento,grado,contraseña))
             mysql.connection.commit()
-            cursor.execute('SELECT id,nombre_completo,grado,grupo FROM estudiantes WHERE numero_documento = %s', (numero_documento,))
+            cursor.execute('SELECT id_estudiante,nombre_completo,grado,grupo FROM estudiantes WHERE numero_documento = %s', (numero_documento,))
             result= cursor.fetchall()
             if result:
-                session['id'] = result[0][0]
+                session['id_estudiante'] = result[0][0]
                 session['nombre_completo'] = result[0][1]
                 session['grado'] = result[0][2]
                 session['grupo'] = result[0][3]

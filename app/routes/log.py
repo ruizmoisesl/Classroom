@@ -25,3 +25,4 @@ def log():
                     return redirect(url_for('interfaz'))
         else:
              return 'Usuario no encontrado'
+        
