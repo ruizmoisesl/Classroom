@@ -1,5 +1,4 @@
 # region import
-
 from flask import Flask, url_for, render_template,request,redirect, session, send_from_directory
 from flask_mysqldb import MySQL
 import secrets
@@ -153,6 +152,7 @@ def add():
 def upload():
     nombre_actividad= request.form['nombre_actividad']
     descripcion= request.form['descripcion']
+    fecha_limte= request.form['limitdate']
     grado= request.form['grado']
     
     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(nombre_actividad))
@@ -170,7 +170,7 @@ def upload():
             cursor= mysql.connection.cursor()
             filename = secure_filename(file.filename)
             file.save(os.path.join(folder_path, filename))
-            cursor.execute('INSERT INTO trabajos (nombre_actividad,descripcion, grado_trabajo, filename ) VALUES (%s,%s,%s,%s)',(nombre_actividad, descripcion,grado,filename))
+            cursor.execute('INSERT INTO trabajos (nombre_actividad,descripcion, fecha_limite ,grado_trabajo, filename ) VALUES (%s,%s,%s,%s,%s)',(nombre_actividad, descripcion,fecha_limte,grado,filename))
             mysql.connection.commit()
             return redirect(url_for('interfaz_maestro'))
 

@@ -57,14 +57,17 @@
                         <div class="bg-white rounded-lg shadow-xl  p-4 mb-4 grid grid-rows-3 mx-4">
                             <div class="flex flex-row justify-between">
                                 <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
-                                <h2 class="text-gray-800 font-semibold text-xl">GRADO ASIGNADO: {{trabajo.3}}</h2>
+                                <h2 class="text-gray-800 font-semibold text-xl">GRADO ASIGNADO: {{trabajo.4}}</h2>
+                            </div>
+                            <div class="flex flex-row justify-end items-end my-2">
+                                <h2 class="text-xl font-semibold">Fecha limite:{{trabajo.3}}</h2>
                             </div>
                             <div>
                                 <p>{{trabajo.2}}</p>
                             </div>
                             <div class="mt-1">
                                 <h2 class="text-xl font-semibold text-gray-800">ARCHIVOS SUBIDOS </h2>
-                                <p>{{trabajo.4}}</p>
+                                <p>{{trabajo.5}}</p>
                             </div>
                             <div class="mt-4  flex flex-row">
                                 <a href="/update/{{trabajo.0}}" class="flex flex-row  w-24  p-1.5 rounded-lg  font-semibold bg-blue-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300"><img src="{{url_for('static', filename='img/edit.svg')}}" alt="">EDITAR</a>
