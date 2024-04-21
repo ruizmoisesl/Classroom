@@ -4,9 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage:{
-        "student": "url(../app/static/img/student.svg)",
-        "teacher": "url(../app/static/img/teacher.svg)"
-
+        "profile": "{{url_for('static', filename= 'img/profile.png')}}"
       }
     },
   },
