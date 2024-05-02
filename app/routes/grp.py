@@ -9,6 +9,6 @@ def grp():
             id= session.get('id_estudiante')
             grupo= request.form['grupo']
             cursor= mysql.connection.cursor()
-            cursor.execute('UPDATE estudiantes SET grupo = %s WHERE id = %s',  (grupo, id, ))
+            cursor.execute('UPDATE estudiantes.estudiantes SET grupo = %s WHERE id = %s',  (grupo, id, ))
             mysql.connection.commit()
             return redirect(url_for('interfaz'))

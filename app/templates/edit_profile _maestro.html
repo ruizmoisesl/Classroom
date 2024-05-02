@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{url_for('static', filename='img/logo.svg')}} " type="image/x-icon">
+        <title>Classroom</title>
+        <style>
+            #aside {
+                transition: margin-left 0.5s;
+            }
+        </style>
+    </head>
+    
+    
+    
+    <body>
+        <header class="fixed w-screen top-0  ">
+            <nav class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg">
+                <div class="flex justify-between text-center text-white font-bold items-center">
+                    <a href="" class="" name="logo"><img src="{{url_for('static', filename='img/logo.svg')}}" width="40"
+                            alt=""></a>
+                    <label for="logo"
+                        class="text-lg p-1 hover:cursor-pointer hover:underline hover:text-green-400">Classroom</label>
+                </div>
+    
+                <div class="flex text-white font-bold mx-4 p-4 text-center items-center">
+                    <h1>{{nombre}} <strong>{{grado}}°{{grupo}}</strong></h1>
+                    <input type="checkbox" id="profile" class="hidden peer">
+                    <label for="profile" class="bg-profile w-[60px] bg-cover cursor-pointer z-50"><img
+                            src="{{url_for('static', filename= 'img/profile.png')}}" alt=""></label>
+                    <div class="fixed inset-0  text-black translate-x-full peer-checked:translate-x-0 transition-transform">
+                        <ul
+                            class="absolute inset-x-0 top-24 p-12 bg-white w-[90%] mx-auto rounded-2xl h-max text-center grid gap-6 font-bold shadow-2xl">
+                            <label for="profile"><img src="{{url_for('static', filename= 'img/close.svg')}}" alt="" class="ml-[1000px]"></label>
+                            <li><a href="">Editar Perfil</a></li>
+                            <li>
+                                <form action="/logout" method="post">
+                                    <input type="submit" value="Cerrar Sesion" class="cursor-pointer">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="min-h-screen flex flex-col sm:flex-row">
+            <main class="flex-grow p-4 mt-16">
+                <div class="container mx-auto py-8 ">
+                    <div class="mx-auto my-20">
+                        {%for dato in datos%}
+                        <input type="text" value="{{dato.1}}">
+                        <input type="text" value="{{dato.2}}">
+                        <input type="text" value="{{dato.7}}">
+                        {%endfor%}
+                    </div>
+                </div>
+            </main>
+        </div>
+
+</body>
+</html>

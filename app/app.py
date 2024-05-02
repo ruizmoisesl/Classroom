@@ -2,7 +2,7 @@
 from flask import Flask, url_for, render_template,request,redirect, session, send_from_directory
 from flask_mysqldb import MySQL
 import secrets
-from routes import reg, log, grp, out
+from routes import reg, log, grp, out, log_maestro
 from werkzeug.utils import secure_filename 
 import os
 import datetime
@@ -16,9 +16,12 @@ ALLOWED_EXTENSIONS= set(['pdf','pptx','docx','jpg','png','peg', 'mp4', 'mp3', 'w
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-app.config['MYSQL_HOST']= 'localhost'
+
+app.config['MYSQL_HOST']= 'roundhouse.proxy.rlwy.net'
 app.config['MYSQL_USER']= 'root'
-app.config['MYSQL_DB']= 'classroom'
+app.config['MYSQL_PORT']= 53399
+app.config['MYSQL_DATABASE']= 'railway'
+app.config['MYSQL_PASSWORD']= 'aMvpscNhTMNBVNtQLWFdouEJIOEhsqLU'
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['UPLOAD_FOLDER']= UPLOAD_FOLDER
 
@@ -28,25 +31,25 @@ mysql= MySQL(app)
 
 def septimo():
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT numero_grupo FROM grupo WHERE id_grado = %s', ('1'))
+    cursor.execute('SELECT nombre_grupo FROM railway.grupo WHERE id_grado = %s', ('1'))
     septimo= cursor.fetchone()
     return septimo
 
 def octavo():
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT numero_grupo FROM grupo WHERE id_grado = %s', ('2'))
+    cursor.execute('SELECT nombre_grupo FROM railway.grupo WHERE id_grado = %s', ('2'))
     octavo= cursor.fetchone()
     return octavo
 def noveno():
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT numero_grupo FROM grupo WHERE id_grado = %s', ('3'))
+    cursor.execute('SELECT nombre_grupo FROM railway.grupo WHERE id_grado = %s', ('3'))
     noveno= cursor.fetchone()
     return noveno
 
 #region grados
 def grados():
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT numero_grado FROM grado')
+    cursor.execute('SELECT nombre_grado FROM railway.grado')
     grados = cursor.fetchall()
     if grados:
         return grados
@@ -103,13 +106,14 @@ def group():
 #region interfaz estudiante
 @app.route('/interfaz')
 def interfaz():
-    nombre= session.get('nombre_completo')
-    grado= session.get('grado')
-    grupo= session.get('grupo')
+    id_estudiante= session.get('id_estudiante')
+    nombre= session.get('nombre_estudiante')
+    grado= session.get('grado_estudiante')
+    grupo= session.get('grupo_estudiante')
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM trabajos WHERE grado_trabajo = %s',(grado,))
+    cursor.execute('SELECT * FROM railway.trabajos WHERE grado_trabajo = %s',(grado,))
     trabajos = cursor.fetchall()
-    return render_template('interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=trabajos)
+    return render_template('interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=reversed(trabajos), id_estudiante= id_estudiante)
 
 #region Logout
 @app.route('/logout', methods= ['POST'])
@@ -120,17 +124,16 @@ def logout():
 @app.route('/maestro')
 def interfaz_maestro():
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM trabajos')
+    id_maestro= session.get('id_maestro')
+    nombre_maestro= session.get('nombre_maestro')
+    cursor.execute('SELECT * FROM railway.trabajos WHERE id_maestro = %s', (id_maestro,))
     trabajos= cursor.fetchall()
-    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos))
+    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos),nombre= nombre_maestro, id_maestro= id_maestro)
 
-@app.route('/login_maestro')
+@app.route('/login_maestro', methods= ['GET','POST'])
 def interfaz_loginMaestro():
     if request.method == 'POST':
-        email= request.form['email']
-        password= request.form['password']
-        cursor= mysql.connection.cursor()
-
+        return log_maestro.log()
 
     return render_template('login_maestro.html')
 
@@ -158,7 +161,7 @@ def upload():
     descripcion= request.form['descripcion']
     fecha_limte= request.form['limitdate']
     grado= request.form['grado']
-    
+    id_maestro= session.get('id_maestro')
     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(nombre_actividad))
 
     if not os.path.exists(folder_path):
@@ -174,7 +177,7 @@ def upload():
             cursor= mysql.connection.cursor()
             filename = secure_filename(file.filename)
             file.save(os.path.join(folder_path, filename))
-            cursor.execute('INSERT INTO trabajos (nombre_actividad,descripcion, fecha_limite ,grado_trabajo, filename ) VALUES (%s,%s,%s,%s,%s)',(nombre_actividad, descripcion,fecha_limte,grado,filename))
+            cursor.execute('INSERT INTO railway.trabajos (nombre_actividad,descripcion_trabajo, fecha_limite_trabajo ,grado_trabajo, nombre_carpeta_trabajo ,id_maestro ) VALUES (%s,%s,%s,%s,%s,%s)',(nombre_actividad, descripcion,fecha_limte,grado,filename,id_maestro))
             mysql.connection.commit()
             return redirect(url_for('interfaz_maestro'))
 
@@ -182,7 +185,7 @@ def upload():
 @app.route('/delete/<string:id_trabajo>')
 def delete(id_trabajo):
     cursor= mysql.connection.cursor()
-    cursor.execute('DELETE FROM trabajos WHERE id_trabajo =%s',(id_trabajo))
+    cursor.execute('DELETE FROM railway.trabajos WHERE id_trabajo =%s',(id_trabajo))
     mysql.connection.commit()
     return redirect(url_for('interfaz_maestro'))
 
@@ -191,7 +194,7 @@ def delete(id_trabajo):
 @app.route('/update/<string:id_trabajo>', methods= ['GET','POST'])
 def update(id_trabajo):
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM trabajos WHERE id_trabajo= %s', (id_trabajo))
+    cursor.execute('SELECT * FROM railway.trabajos WHERE id_trabajo= %s', (id_trabajo))
     datos= cursor.fetchone()
 
     if request.method == 'POST':
@@ -206,7 +209,7 @@ def update(id_trabajo):
         if archivo and allowed_file(filename):
             archivo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
             cursor= mysql.connection.cursor()
-            cursor.execute('UPDATE trabajos  SET nombre_actividad = %s, descripcion = %s, filename = %s WHERE id_trabajo = %s ', (nombre_actividad, descripcion, filename, id_trabajo,))
+            cursor.execute('UPDATE railway.trabajos  SET nombre_actividad = %s, descripcion = %s, filename = %s WHERE id_trabajo = %s ', (nombre_actividad, descripcion, filename, id_trabajo,))
             mysql.connection.commit()
 
             return redirect(url_for('interfaz_maestro'))
@@ -220,7 +223,7 @@ def update(id_trabajo):
 @app.route('/ver_actividad/<string:id>', methods= ['GET', 'POST'])
 def  ver_actividad(id):
     cursor= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM trabajos WHERE id_trabajo = %s',(id))
+    cursor.execute('SELECT * FROM railway.trabajos WHERE id_trabajo = %s',(id))
     trabajos = cursor.fetchall()
     cursor.close()
     if trabajos:
@@ -234,10 +237,24 @@ def  ver_actividad(id):
          
     return render_template('ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo)
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
+@app.route('/edit_profile/<string:id_estudiante>')
+def edit_profile(id_estudiante):
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT * FROM railway.estudiantes WHERE id_estudiante =%s' , (id_estudiante))
+    datos= cursor.fetchall()
+    nombre= session.get('nombre_completo')
+    grado= session.get('grado')
+    grupo= session.get('grupo')
+    return render_template('edit_profile.html', nombre=nombre, grado=grado, grupo=grupo, datos= datos)
 
+
+@app.route('/edit_profile_maestro/<string:id_maestro>')
+def edit_profile_maestro(id_maestro):
+    cursor= mysql.connection.cursor()
+    cursor.execute('SELECT * FROM maestros.maestros WHERE id_maestro =%s' , (id_maestro))
+    datos= cursor.fetchall()
+    nombre_maestro= session.get('nombre_maestro')
+    return render_template('edit_profile_maestro.html', nombre=nombre_maestro, datos= datos)
 
 if __name__ == "__main__":
     app.run(debug=True)

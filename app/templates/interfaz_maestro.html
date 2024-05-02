@@ -24,9 +24,23 @@
                 </div>
 
                 <div class="flex text-white font-bold mx-4 p-4 text-center items-center">
-                    <form action="/logout" method="post">
-                        <input type="submit" value="Cerrar sesion" class="mx-4 p-1.5 rounded-lg  bg-slate-400 hover:bg-slate-200 hover:text-black hover:shadow-slate-900 hover:shadow-lg hover:transition hover:duration-300 ">
-                    </form>           
+                    <h1>{{nombre}}</h1>
+                    <input type="checkbox" id="profile" class="hidden peer">
+                    <label for="profile" class="bg-profile w-[60px] bg-cover cursor-pointer z-50"><img
+                            src="{{url_for('static', filename= 'img/profile.png')}}" alt=""></label>
+                    <div class="fixed inset-0  text-black translate-x-full peer-checked:translate-x-0 transition-transform">
+                        <ul
+                            class="absolute inset-x-0 top-24 p-12 bg-white w-[90%] mx-auto rounded-2xl h-max text-center grid gap-6 font-bold shadow-2xl">
+                            <label for="profile"><img src="{{url_for('static', filename= 'img/close.svg')}}" alt=""
+                                    class="ml-[1000px]"></label>
+                            <li><a href="/edit_profile_maestro/{{id_maestro}}">Editar Perfil</a></li>
+                            <li>
+                                <form action="/logout" method="post">
+                                    <input type="submit" value="Cerrar Sesion" class="cursor-pointer">
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -47,7 +61,7 @@
                     <div class="sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class=" flex  items-center justify-between mb-4  mx-4">
                             <div class="">
-                                <input type="search" name="" id="" class="p-1 outline-none border-gray-600 border-2 rounded-xl w-full   focus:border-gray-300 focus:transition focus:duration-500 focus:shadow-lg focus:shadow-slate-800 font-bold">
+                                <input type="search" name="" id="search" class="p-1 outline-none border-gray-600 border-2 rounded-xl w-full   focus:border-gray-300 focus:transition focus:duration-500 focus:shadow-lg focus:shadow-slate-800 font-bold">
                             </div>
                             <div class="flex">
                                 <a href="/add" class="flex flex-row justify-center items-center font-semibold"><img src="{{url_for('static', filename='img/add.svg')}}" alt="Agregar Actividad" class='min-w-8 '>AGREGAR ACTIVIDAD</a>
@@ -90,6 +104,21 @@
                     aside.style.marginLeft = '0';
                 }
             }
+
+            function search() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const trabajos = document.querySelectorAll('.bg-white'); // Selecciona todos los trabajos
+            trabajos.forEach(trabajo => {
+                const texto = trabajo.textContent.toLowerCase(); // Obtén el texto de cada trabajo
+                if (texto.includes(searchTerm)) {
+                    trabajo.style.display = 'block'; // Si el término de búsqueda está incluido, muestra el trabajo
+                } else {
+                    trabajo.style.display = 'none'; // Si no, oculta el trabajo
+                }
+            });
+        }
+
+        document.getElementById('search').addEventListener('input', search);
         </script>
     </body>
     </html>
