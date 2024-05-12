@@ -49,13 +49,13 @@
             </div>
         </nav>
     </header>
-    <div class="min-h-screen flex flex-col sm:flex-row">
-        <aside id="aside" class="bg-gray-800 text-white mt-20 p-4 w-64">
+    <div class="min-h-screen flex flex-col  sm:flex-row">
+        <aside id="aside" class="bg-gray-800 text-white mt-20 p-4 min-w-72  ">
             <h2 class="text-xl font-semibold">Tareas Asignadas</h2>
             {%for trabajo in trabajos%}
             <ul>
                 <li
-                    class="overflow-hidden flex flex-col mb-5 mt-5 hover:bg-slate-400 hover:scale-[10px] hover:rounded-lg hover:shadow-lg hover:shadow-black hover:transition hover:delay-75 hover:duration-300">
+                    class="overflow-hidden flex flex-1 w-[250px] flex-col mb-5 mt-5 hover:bg-slate-400 hover:scale-[10px] hover:rounded-lg hover:shadow-lg hover:shadow-black hover:transition hover:delay-75 hover:duration-300">
                     <a href="/ver_actividad/{{trabajo.0}}">{{trabajo.1}}</a>
                 </li>
             </ul>
@@ -71,13 +71,13 @@
                                 placeholder="Buscar...">
                         </div>
                     </div>
-                    {%for trabajo in trabajos%}
-                    <div class="bg-white rounded-lg shadow-xl  p-4 mb-4 grid grid-rows-3">
-                        <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
-                        <a href="/ver_actividad/{{trabajo.0}}" class="text-blue-400 mt-2">VER TRABAJO</a>
-                    </div>
-                    {%endfor%}
                 </div>
+                {%for trabajo in trabajos%}
+                <div class="bg-white rounded-lg shadow-xl  p-4 mb-4 grid grid-rows-3">
+                    <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
+                    <a href="/ver_actividad/{{trabajo.0}}" class="text-blue-400 mt-2">VER TRABAJO</a>
+                </div>
+                {%endfor%}
             </div>
         </main>
     </div>

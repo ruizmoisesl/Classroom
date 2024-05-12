@@ -1,11 +1,11 @@
 # region import
-from flask import Flask, url_for, render_template,request,redirect, session, send_from_directory
-from flask_mysqldb import MySQL
+from flask import Flask, url_for, render_template,request,redirect, session
+from flask_mysqldb  import MySQL
 import secrets
 from routes import reg, log, grp, out, log_maestro
 from werkzeug.utils import secure_filename 
 import os
-import datetime
+from datetime import datetime
 
 # region config 
 app= Flask(__name__)
@@ -15,6 +15,10 @@ ALLOWED_EXTENSIONS= set(['pdf','pptx','docx','jpg','png','peg', 'mp4', 'mp3', 'w
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+
+fecha_actual= datetime.now()
+formato= datetime.strftime(fecha_actual, '%d %h, %I:%M %p')
 
 
 app.config['MYSQL_HOST']= 'roundhouse.proxy.rlwy.net'
@@ -58,7 +62,7 @@ def grados():
 
 @app.route('/')
 def principal():
-    return render_template('principal.html')
+    return render_template('principal.html', fecha_actual = formato)
 
 #region register
 
@@ -113,7 +117,8 @@ def interfaz():
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM railway.trabajos WHERE grado_trabajo = %s',(grado,))
     trabajos = cursor.fetchall()
-    return render_template('interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=reversed(trabajos), id_estudiante= id_estudiante)
+
+    return render_template('interfaz.html', nombre=nombre,grado=grado,grupo=grupo, trabajos=list(reversed(trabajos)), id_estudiante= id_estudiante)
 
 #region Logout
 @app.route('/logout', methods= ['POST'])
@@ -128,7 +133,10 @@ def interfaz_maestro():
     nombre_maestro= session.get('nombre_maestro')
     cursor.execute('SELECT * FROM railway.trabajos WHERE id_maestro = %s', (id_maestro,))
     trabajos= cursor.fetchall()
-    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos),nombre= nombre_maestro, id_maestro= id_maestro)
+    if trabajos:
+        felimite= trabajos[0][3]
+        fecha_formateada= datetime.strftime(felimite, '%d %h, %I:%M %p' ) 
+    return render_template('interfaz_maestro.html',trabajos=reversed(trabajos),nombre= nombre_maestro, id_maestro= id_maestro ,fecha= fecha_formateada )
 
 @app.route('/login_maestro', methods= ['GET','POST'])
 def interfaz_loginMaestro():
@@ -225,17 +233,20 @@ def  ver_actividad(id):
     cursor= mysql.connection.cursor()
     cursor.execute('SELECT * FROM railway.trabajos WHERE id_trabajo = %s',(id))
     trabajos = cursor.fetchall()
-    cursor.close()
     if trabajos:
         session['filename']= trabajos[0][4]
-
+        fecha = trabajos[0][3]
+        fecha_forma= datetime.strftime(fecha, '%d %h, %I:%M %p')
     
-    nombre= session.get('nombre_completo')
-    grado= session.get('grado')
-    grupo= session.get('grupo')
+    nombre= session.get('nombre_estudiante')
+    grado= session.get('grado_estudiante')
+    grupo= session.get('grupo_estudiante')
 
+    cursor.execute('SELECT * FROM railway.trabajos WHERE grado_trabajo = %s', (grado,))
+    listra= cursor.fetchall()
+    cursor.close()
          
-    return render_template('ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo)
+    return render_template('ver_trabajo.html', trabajos= trabajos,nombre=nombre,grado=grado,grupo=grupo,listra= reversed(listra), fecha = fecha_forma)
 
 @app.route('/edit_profile/<string:id_estudiante>')
 def edit_profile(id_estudiante):

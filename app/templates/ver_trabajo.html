@@ -41,9 +41,9 @@
         <div class="min-h-screen flex flex-col sm:flex-row">
             <aside id="aside" class="bg-gray-800 text-white mt-16 p-4 w-64">
                 <h2 class="text-xl font-semibold">Tareas Asignadas</h2>
-                {%for lit in lista%}
+                {%for work in listra%}
                 <ul>
-                    <li><a href="/ver_actividad/{{trabajo.0}}">{{lit.0}}</a></li>
+                    <li><a href="/ver_actividad/{{work.0}}">{{work.1}}</a></li>
                 </ul>
                 {%endfor%}
             </aside>
@@ -52,9 +52,14 @@
                     <div class="sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {%for trabajo in trabajos%}
                         <div class="bg-white rounded-lg shadow-xl  p-4 mb-4 grid grid-rows-3">
-                            <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
+                            <div class="flex flex-row justify-between items-center">
+                                <h2 class="text-xl font-semibold text-gray-800">{{trabajo.1}}</h2>
+                                <p class="font-semibold text-center flex items-center">Fecha Entrega: {{fecha}}</p>
+                            </div>
+                           
                             <p>{{trabajo.2}}</p>
                             <h2 class="text-xl font-semibold text-gray-800">Archivos Necesarios</h2>
+                            
                             
                         </div>
                         {%endfor%}

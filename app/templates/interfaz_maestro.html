@@ -16,7 +16,7 @@
 
     <body>
         <header class="fixed w-screen top-0 ">
-            <nav class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg">
+            <nav class="w-full h-auto px-4 overflow-hidden flex justify-between bg-slate-500 shadow-slate-900 shadow-lg max-h-16">
                 <div class="flex justify-between text-center text-white font-bold items-center">
                     <button onclick="toggleAside()" class=" text-white p-2 rounded"><img src="{{url_for('static', filename='img/menu-2.svg')}}" width="35" alt=""></button>
                     <a href="" class="" name="logo"><img src="{{url_for('static', filename='img/logo.svg')}}" width="40" alt=""></a>
@@ -74,7 +74,7 @@
                                 <h2 class="text-gray-800 font-semibold text-xl">GRADO ASIGNADO: {{trabajo.4}}</h2>
                             </div>
                             <div class="flex flex-row justify-end items-end my-2">
-                                <h2 class="text-xl font-semibold">Fecha limite:{{trabajo.3}}</h2>
+                                <h2 class="text-xl font-semibold">Fecha limite:{{fecha}}</h2>
                             </div>
                             <div>
                                 <p>{{trabajo.2}}</p>
