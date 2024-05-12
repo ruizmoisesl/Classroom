@@ -266,6 +266,3 @@ def edit_profile_maestro(id_maestro):
     datos= cursor.fetchall()
     nombre_maestro= session.get('nombre_maestro')
     return render_template('edit_profile_maestro.html', nombre=nombre_maestro, datos= datos)
-
-if __name__ == "__main__":
-    app.run(debug=True)
